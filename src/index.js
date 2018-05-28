@@ -9,6 +9,7 @@ import Login from './container/login/login'
 import Register from './container/register/register'
 // import reducers from './reducer'
 import './config'
+import AuthRoute from './component/authRoute/authRoute'
 
 // const store = createStore(reducers, compose(
 //   applyMiddleware(thunk),
@@ -20,6 +21,7 @@ ReactDom.render(
     // <Provider>
       <BrowserRouter>
         <div>
+          <AuthRoute></AuthRoute>
           <Route path="/login" component={Login}></Route>
           <Route path="/Register" component={Register}></Route>
         </div>
