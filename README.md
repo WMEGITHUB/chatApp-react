@@ -16,3 +16,6 @@ react16+redux+express+mongodb构建聊天app
 * express 
 * mongodb
 * socket.io
+"react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "react-scripts": "1.1.4"
