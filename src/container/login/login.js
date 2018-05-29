@@ -19,9 +19,9 @@ class Login extends React.Component{
         <Logo></Logo>
         <WingBlank>
           <List>
-            <InputItem>用户</InputItem>
+            <InputItem placeholder="请输入用户名">用户</InputItem>
             <WhiteSpace/>
-            <InputItem>密码</InputItem>
+            <InputItem placeholder="请输入密码">密码</InputItem>
           </List>
           <WhiteSpace/>
           <Button type="primary">登录</Button>

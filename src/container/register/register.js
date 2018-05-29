@@ -17,11 +17,11 @@ class Register extends React.Component{
         <Logo></Logo>
         <WingBlank>
           <List>
-            <InputItem>用户名</InputItem>
+            <InputItem placeholder="请输入用户名">用户名</InputItem>
             <WhiteSpace/>
-            <InputItem>密码</InputItem>
+            <InputItem placeholder="请输入密码">密码</InputItem>
             <WhiteSpace/>
-            <InputItem>确认密码</InputItem>
+            <InputItem placeholder="请再次输入密码">确认密码</InputItem>
             <WhiteSpace/>
             <RadioItem checked={this.state.type==='genius'}>牛人
             </RadioItem>
