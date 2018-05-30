@@ -3,13 +3,10 @@ import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import { NavBar } from 'antd-mobile'
 import NavlinkBar from './../navlink/navlink'
+import Boss from './../../component/boss/boss'
 
 
-function Boss() {
-  return (
-    <h2>boss页面</h2>
-  )
-}
+
 function Genius() {
   return (
     <h2>genius页面</h2>
@@ -68,7 +65,7 @@ class Dashboard extends React.Component {
     ]
     return (
       <div>
-        <NavBar className="fix-header" mode='dard'>{navList.find(v=>v.path===pathname).title}</NavBar>
+        <NavBar className="fixed-header" mode='dard'>{navList.find(v=>v.path===pathname).title}</NavBar>
         <div style={{marginTop: 45}}>
           <Switch>
             {navList.map(v=>(
