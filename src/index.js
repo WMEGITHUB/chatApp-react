@@ -12,12 +12,13 @@ import './config'
 import AuthRoute from './component/authRoute/authRoute'
 import BossInfo from './container/bossInfo/bossInfo'
 import GeniusInfo from './container/geniusInfo/geniusInfo'
+import Dashboard from './component/dashboard/dashboard'
 
 const store = createStore(reducers, compose(
   applyMiddleware(thunk),
   window.devToolsExtension ? window.devToolsExtension() : f => f
 ))
-
+//  boss genius me msg
 ReactDom.render(
   (
     <Provider store={store}>
@@ -29,6 +30,7 @@ ReactDom.render(
             <Route path="/geniusinfo" component={GeniusInfo}></Route>
             <Route path="/login" component={Login}></Route>
             <Route path="/Register" component={Register}></Route>
+            <Route component={Dashboard}></Route>
           </Switch>
         </div>
       </BrowserRouter>
