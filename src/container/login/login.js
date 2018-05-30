@@ -10,7 +10,7 @@ import './../../index.css'
   state => state.user,
   { login }
 )
-class Login extends React.Component{
+class Login extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
