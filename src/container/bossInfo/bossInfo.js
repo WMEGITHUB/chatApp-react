@@ -16,13 +16,21 @@ class BossInfo extends React.Component {
     this.state = {
       title: '',
       company: '',
-      money: ''
+      money: '',
+      desc: ''
     }
+
+    this.handleAvatar = this.handleAvatar.bind(this)
   }
 
   handleInput(key, val) {
     this.setState({
       [key]: val
+    })
+  }
+  handleAvatar(imgname) {
+    this.setState({
+      avatar: imgname
     })
   }
   
@@ -34,11 +42,7 @@ class BossInfo extends React.Component {
         {redirect && redirect !== path ? <Redirect to={this.props.redirectTo} /> : null}
         <NavBar mode="dark">BOSS完善信息页</NavBar>
         <AvatarSelector 
-          selectAvatar={(imgname)=>{
-            this.setState({
-              avatar: imgname
-            })
-          }}></AvatarSelector>
+          selectAvatar={this.handleAvatar}></AvatarSelector>
         <InputItem onChange={v=>this.handleInput('title', v)}>
           招聘职位
         </InputItem>
