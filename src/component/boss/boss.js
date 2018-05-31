@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { getUserList } from "./../../redux/chatuser.redux"
-import { Card, WhiteSpace, WingBlank } from 'antd-mobile'
 import UserCard from './../usercard/usercard'
 
 @connect(
