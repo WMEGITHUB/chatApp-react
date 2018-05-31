@@ -1,7 +1,12 @@
 import React from 'react'
-import axios from 'axios'
+import { connect } from 'react-redux'
+import { getUserList } from "./../../redux/chatuser.redux"
 import { Card, WhiteSpace, WingBlank } from 'antd-mobile'
 
+@connect(
+  state => state.chatuser,
+  { getUserList }
+)
 class Boss extends React.Component {
   constructor(props) {
     super(props)
@@ -12,22 +17,16 @@ class Boss extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('/user/list?type=genius')
-      .then(res => {
-        if (res.data.code === 0) {
-          this.setState({ data: res.data.data })
-        }
-      })
+    this.props.getUserList('genius')
   }
 
   render() {
-    console.log(this.state)
     const Header = Card.Header
     const Body = Card.Body
     return (
       <WingBlank>
         <WhiteSpace></WhiteSpace>
-        {this.state.data.map(v=>(
+        {this.props.userlist.map(v=>(
           v.avatar ? (<Card key={v._id}>
                       <Header
                         title={v.user}
