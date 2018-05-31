@@ -5,18 +5,16 @@ import { Redirect } from 'react-router-dom'
 import { connect } from "react-redux"
 import { login } from './../../redux/user.redux'
 import './../../index.css'
+import appForm from './../../component/app-form/app-form'
 
 @connect(
   state => state.user,
   { login }
 )
+@appForm
 class Login extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      user: '',
-      pwd: ''
-    }
 
     this.register = this.register.bind(this)
     this.handleLogin = this.handleLogin.bind(this)
@@ -24,13 +22,8 @@ class Login extends React.Component {
   register() {
     this.props.history.push('/register')
   }
-  handleChange(key, val) {
-    this.setState({
-      [key]: val
-    })
-  }
   handleLogin() {
-    this.props.login(this.state)
+    this.props.login(this.props.state)
   }
 
   render() {
@@ -42,11 +35,11 @@ class Login extends React.Component {
           <List>
             {this.props.msg ? <p className="error_msg">{this.props.msg}</p> : null}
             <InputItem placeholder="请输入用户名"
-              onChange={v=>this.handleChange('user', v)}>用户</InputItem>
+              onChange={v=>this.props.handleChange('user', v)}>用户</InputItem>
             <WhiteSpace/>
             <InputItem placeholder="请输入密码"
               type="password"
-              onChange={v=>this.handleChange('pwd', v)}>密码</InputItem>
+              onChange={v=>this.props.handleChange('pwd', v)}>密码</InputItem>
           </List>
           <WhiteSpace/>
           <Button type="primary"
