@@ -2,9 +2,12 @@ import React from "react"
 import { connect } from 'react-redux'
 import { Result, List, WhiteSpace, Button, Modal } from "antd-mobile"
 import browserCookie from 'browser-cookies'
+import { logoutSubmit } from "./../../redux/user.redux"
+import { Redirect } from 'react-router-dom'
 
 @connect(
-  state => state.user
+  state => state.user,
+  { logoutSubmit }
 )
 class User extends React.Component {
   constructor(props) {
@@ -21,6 +24,7 @@ class User extends React.Component {
       { text: '取消', onPress: () => console.log('cancel') },
       { text: '确认', onPress: () => {
         browserCookie.erase('userid')
+        this.props.logoutSubmit()
       } }
     ])
   }
@@ -47,7 +51,7 @@ class User extends React.Component {
         <WhiteSpace></WhiteSpace>
 				<Button type="warning" onClick={this.logout}>退出登录</Button>
       </div>
-    ) : null;
+    ) : <Redirect to={props.redirectTo}></Redirect>;
   }
 }
 
