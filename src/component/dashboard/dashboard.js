@@ -6,13 +6,9 @@ import NavlinkBar from './../navlink/navlink'
 import Boss from './../boss/boss'
 import Genius from './../genius/genius'
 import User from './../user/user'
+import Msg from './../msg/msg'
 import { getMsgList, recvMsg } from './../../redux/chat.redux'
 
-function Msg() {
-  return (
-    <h2>消息页面</h2>
-  )
-}
 
 @connect(
   state=>state,
@@ -63,7 +59,7 @@ class Dashboard extends React.Component {
     return (
       <div>
         <NavBar className="fixed-header" mode='dard'>{navList.find(v=>v.path===pathname).title}</NavBar>
-        <div style={{marginTop: 45}}>
+        <div >
           <Switch>
             {navList.map(v=>(
               <Route 
