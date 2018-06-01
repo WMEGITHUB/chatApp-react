@@ -6,6 +6,8 @@ const Chat = model.getModel('chat')
 const utils = require('utility')
 
 const _filter = { 'pwd': 0, '__v': 0 }
+// 清空聊天信息
+// Chat.remove({},function(err,doc){})
 
 Router.get('/list', function(req, res) {
   const { type } = req.query
@@ -81,7 +83,7 @@ Router.get('/getmsglist', function(req, res) {
   //  $or: [{form: user, to: user}] 
   Chat.find({}, function(err, doc) {
     if (!err) {
-      return res.json({ code: 0, msg: doc })
+      return res.json({ code: 0, msgs: doc })
     }
   })
 })
