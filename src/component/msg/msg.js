@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { List } from 'antd-mobile'
+import { List, Badge } from 'antd-mobile'
 
 @connect(
   state => state
@@ -22,21 +22,32 @@ class Msg extends React.Component {
       msgGroup[v.chatid].push(v)
     });
     
-    const chatList = Object.values(msgGroup)
+    const chatList = Object.values(msgGroup).sort((a, b) => {
+      const a_last = this.getLast(a).create_time
+      const b_last = this.getLast(b).create_time
+      return b_last - a_last
+    })
+    console.log(chatList)
     // 按照聊天用户分组  根据chatid
     return (
       <div>
           {chatList.map(v => {
             const lastItem = this.getLast(v)
             const targetId = v[0].from === userid ? v[0].to : v[0].from
+            const unreadNum = v.filter(v => !v.read && v.to === userid).length
             if (!userinfo[targetId]) {
               return null
             }
             return (
               <List
-                key={v._id}>
-                <Item 
-                  thumb={require(`../img/${userinfo[targetId].avatar}.png`)}>
+                key={lastItem._id}>
+                <Item
+                  extra={<Badge text={unreadNum}></Badge>} 
+                  thumb={require(`../img/${userinfo[targetId].avatar}.png`)}
+                  arrow="horizontal"
+                  onClick={()=>{
+                    this.props.history.push(`/chat/${targetId}`)
+                  }}>
                   {lastItem.content}
                 <Brief>{userinfo[targetId].name}</Brief>
                 </Item>
