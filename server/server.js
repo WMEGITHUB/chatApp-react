@@ -1,8 +1,22 @@
+import express from 'express'
+// const express = require('express')
+import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
+import model from './model'
+import path from 'path'
 
-const express = require('express')
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
-const model = require('./model')
+import React from 'react'
+import { renderToString } from 'react-dom/server'
+// React 组件 => div
+function App() {
+	return (
+		<div>
+			<p>server render</p>
+			<p>hello world</p>
+		</div>
+	)
+}
+
 const Chat = model.getModel('chat')
 const app = express()
 // work with express
@@ -26,7 +40,18 @@ const userRouter = require('./user')
 
 app.use(cookieParser())
 app.use(bodyParser.json())
+// 1. 购买域名
+// 2. DNS解析到你服务器的IP
+// 3. 安装nginx 并配置反向代理
+// 4. 使用pm2管理node进程
 app.use('/user', userRouter)
+app.use(function(req, res, next) {
+	if (req.url.startsWith('/user/') || req.url.startsWith('/static/')) {
+		return next()
+	}
+	return res.sendFile(path.resolve('build/index.html'))
+})
+app.use('/', express.static(path.resolve('build')))
 server.listen(9093, function() {
 	console.log('Node app start at port 9093')
 })
