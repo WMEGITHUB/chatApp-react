@@ -6,16 +6,23 @@ import model from './model'
 import path from 'path'
 
 import React from 'react'
+import { createStore, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
+import { Provider } from 'react-redux'
+import { StaticRouter } from 'react-router-dom'
+import App from '../src/app'
+import reducers from '../src/reducer'
+
 import { renderToString } from 'react-dom/server'
 // React 组件 => div
-function App() {
-	return (
-		<div>
-			<p>server render</p>
-			<p>hello world</p>
-		</div>
-	)
-}
+// function App() {
+// 	return (
+// 		<div>
+// 			<p>server render</p>
+// 			<p>hello world</p>
+// 		</div>
+// 	)
+// }
 
 const Chat = model.getModel('chat')
 const app = express()
@@ -49,7 +56,20 @@ app.use(function(req, res, next) {
 	if (req.url.startsWith('/user/') || req.url.startsWith('/static/')) {
 		return next()
 	}
-	return res.sendFile(path.resolve('build/index.html'))
+	const store = createStore(reducers, compose(
+		applyMiddleware(thunk)
+	))
+	let context = {}
+	const markup = renderToString(
+		<Provider store={store}>
+			<StaticRouter
+				location={req.url}
+				context={context}>
+        <App></App>
+      </StaticRouter>
+    </Provider>
+	)
+	return res.send(markup)
 })
 app.use('/', express.static(path.resolve('build')))
 server.listen(9093, function() {
