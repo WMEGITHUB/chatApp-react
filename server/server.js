@@ -4,7 +4,11 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import model from './model'
 import path from 'path'
-
+import csshook from 'css-modules-require-hook/preset'
+import assethook from 'asset-require-hook'
+assethook({
+	extensions: ['png']
+})
 import React from 'react'
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
@@ -13,7 +17,12 @@ import { StaticRouter } from 'react-router-dom'
 import App from '../src/app'
 import reducers from '../src/reducer'
 
-import { renderToString } from 'react-dom/server'
+// import { renderToString } from 'react-dom/server'
+import { renderToNodeStream } from 'react-dom/server'
+import staticPath from '../build/asset-manifest.json'
+
+
+
 // React 组件 => div
 // function App() {
 // 	return (
@@ -60,7 +69,40 @@ app.use(function(req, res, next) {
 		applyMiddleware(thunk)
 	))
 	let context = {}
-	const markup = renderToString(
+	// const markup = renderToString(
+	// 	<Provider store={store}>
+	// 		<StaticRouter
+	// 			location={req.url}
+	// 			context={context}>
+  //        <App></App>
+  //      </StaticRouter>
+  //    </Provider>
+	// )
+	const obj = {
+		'/msg': 'React聊天消息列表',
+		'/boss': 'React查看牛人列表'
+	}
+	res.write(
+		`
+			<!DOCTYPE html>
+		<html lang="en">
+		  <head>
+		    <meta charset="utf-8">
+		    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		    <meta name="theme-color" content="#000000">
+		    <meta name="keywords" content="React, Redux, Chat, App, SSR" />
+		    <meta name="keywords" content="${obj[req.url]}" />
+		    <title>React App</title>
+		    <link rel="stylesheet" href="/${staticPath['main.css']}" />
+		  </head>
+		  <body>
+		    <noscript>
+		      You need to enable JavaScript to run this app.
+		    </noscript>
+		    <div id="root">
+		`
+	)
+	const markupStream = renderToNodeStream(
 		<Provider store={store}>
 			<StaticRouter
 				location={req.url}
@@ -69,7 +111,40 @@ app.use(function(req, res, next) {
       </StaticRouter>
     </Provider>
 	)
-	return res.send(markup)
+	markupStream.pipe(res, { end: false })
+	markupStream.on('end', () => {
+		res.write(
+			`
+				</div>
+		  </body>
+		  <script src="/${staticPath['main.js']}"></script>
+		</html>
+			`
+		)
+		res.end()
+	})
+	// const pageHtml = `
+	// 	<!DOCTYPE html>
+	// 	<html lang="en">
+	// 	  <head>
+	// 	    <meta charset="utf-8">
+	// 	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	// 	    <meta name="theme-color" content="#000000">
+	// 	    <meta name="keywords" content="React, Redux, Chat, App, SSR" />
+	// 	    <meta name="keywords" content="${obj[req.url]}" />
+	// 	    <title>React App</title>
+	// 	    <link rel="stylesheet" href="/${staticPath['main.css']}" />
+	// 	  </head>
+	// 	  <body>
+	// 	    <noscript>
+	// 	      You need to enable JavaScript to run this app.
+	// 	    </noscript>
+	// 	    <div id="root">${markup}</div>
+	// 	  </body>
+	// 	  <script src="/${staticPath['main.js']}"></script>
+	// 	</html>
+	// `
+	// res.send(pageHtml)
 })
 app.use('/', express.static(path.resolve('build')))
 server.listen(9093, function() {
