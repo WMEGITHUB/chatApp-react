@@ -34,7 +34,6 @@ class Msg extends React.Component {
             const lastItem = this.getLast(v)
             const targetId = v[0].from === userid ? v[0].to : v[0].from
             const unreadNum = v.filter(v => !v.read && v.to === userid).length
-            console.log(v.filter(v => !v.read && v.to === userid))
             if (!userinfo[targetId]) {
               return null
             }
